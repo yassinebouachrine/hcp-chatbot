@@ -18,7 +18,7 @@ Le **HCP Chatbot** facilite l'accès aux données démographiques officielles **
 
 ### 🎯 Fonctionnalités
 
-- ✅ **Recherche sémantique** dans 140 000+ statistiques HCP
+- ✅ **Recherche sémantique** 
 - ✅ **Interface web intuitive** avec chat en temps réel
 - ✅ **API REST** pour intégrations
 - ✅ **Réponses contextuelles** basées sur l'IA
