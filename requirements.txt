@@ -1,0 +1,34 @@
+# Core ML / HF
+torch==2.1.0
+transformers==4.36.2
+tokenizers==0.15.0
+huggingface-hub==0.19.4
+accelerate==0.25.0
+
+# Datasets & embeddings
+datasets==2.14.7
+sentence-transformers==2.2.2
+tqdm==4.66.1
+
+# FAISS (CPU). If you have CUDA and want GPU support, replace with faiss-gpu compatible with your CUDA.
+faiss-cpu==1.7.4
+
+# Data science / utils
+numpy==1.24.3
+pandas==2.1.4
+scikit-learn==1.3.2
+psutil==5.9.5
+protobuf==4.24.4
+
+# Web / API
+flask==2.3.3
+Flask-Cors==3.0.10
+
+# Dev / config
+python-dotenv==1.0.0
+
+# Lightning (version corrigée - supprimé la version problématique)
+# Si vous n'utilisez pas PyTorch Lightning, commentez cette ligne
+# Si vous l'utilisez, décommentez une des options ci-dessous :
+# pytorch-lightning==1.8.6
+# lightning>=2.0.0

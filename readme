@@ -1,0 +1,386 @@
+
+
+python -c "from src.data_processor import HCPDataProcessor; from config import Config; proc = HCPDataProcessor(Config); data = proc.load_all_data(); qa_pairs = proc.create_qa_pairs(); print(f'✅ Données préparées: {len(qa_pairs)} paires QA prêtes pour entraînement'); stats = proc.get_statistics(); print(f'📊 Territoires: {len(stats.get(\"territories\", {}))}, Types: {len(stats.get(\"question_types\", {}))}, Indicateurs: {len(stats.get(\"indicators\", {}))}'); proc.analyze_data_coverage()"
+
+
+
+python -c "from src.data_processor import HCPDataProcessor; from src.model_trainer import HCPChatbotTrainer; from config import Config; proc = HCPDataProcessor(Config); data = proc.load_all_data(); qa_pairs = proc.create_qa_pairs(); trainer = HCPChatbotTrainer(Config); trainer.train_model(qa_pairs, use_validation=True, force_use_all_data=True); print('🎯 Entraînement terminé!')"
+
+
+
+
+
+
+
+
+
+
+# HCP Chatbot - Déploiement Docker
+
+Ce guide vous explique comment déployer votre chatbot HCP (Haut-Commissariat au Plan) spécialisé dans les données démographiques du Maroc en utilisant Docker.
+
+## 📋 Prérequis
+
+- Docker installé (version 20.10+)
+- docker-compose installé (version 1.29+)
+- Au moins 4GB de RAM disponible
+- Fichier `data/indicators.json` avec la structure HCP qa_pairs
+
+## 🏗️ Structure du projet
+
+```
+HCP-CHATBOT/
+├── app.py                    # Application Flask principale
+├── config.py                 # Configuration HCP (votre fichier existant)
+├── requirements.txt          # Dépendances Python
+├── Dockerfile               # Image Docker
+├── docker-compose.yml       # Orchestration des services
+├── .dockerignore           # Fichiers à ignorer
+├── .env.template           # Template de configuration
+├── build_and_run.sh        # Script de démarrage automatique
+├── data/
+│   ├── indicators.json      # 📊 Données HCP avec structure qa_pairs
+│   └── conversation_history.json
+├── models/
+│   └── models_hcp/         # Modèles pré-entraînés
+├── src/
+│   ├── chatbot.py          # Votre chatbot HCP
+│   ├── data_processor.py   # Processeur de données HCP
+│   └── ...
+├── templates/
+│   └── index.html          # Interface web
+└── static/
+    ├── css/
+    ├── js/
+    └── images/
+```
+
+## 🚀 Démarrage rapide
+
+### 1. Préparation
+
+```bash
+# Copier le template de configuration
+cp .env.template .env
+
+# Éditer la configuration si nécessaire
+nano .env
+
+# Vérifier que vos données HCP sont présentes
+ls -la data/indicators.json
+```
+
+### 2. Lancement automatique
+
+```bash
+# Rendre le script exécutable
+chmod +x build_and_run.sh
+
+# Lancer le chatbot HCP
+./build_and_run.sh
+```
+
+### 3. Lancement manuel
+
+```bash
+# Construire l'image
+docker-compose build
+
+# Démarrer les services
+docker-compose up -d
+
+# Vérifier les logs
+docker-compose logs -f
+```
+
+## 🔧 Configuration
+
+### Variables d'environnement (.env)
+
+| Variable | Défaut | Description |
+|----------|--------|-------------|
+| `FLASK_HOST` | `0.0.0.0` | Host Flask pour Docker |
+| `FLASK_PORT` | `5000` | Port d'écoute Flask |
+| `FLASK_DEBUG` | `False` | Mode debug (production: False) |
+| `HUGGING_FACE_TOKEN` | `` | Token HF pour modèles privés |
+| `USE_CUDA` | `False` | Utiliser GPU (nécessite nvidia-docker) |
+| `FP16` | `False` | Précision mixte pour GPU |
+| `LOG_LEVEL` | `INFO` | Niveau de logging |
+| `BATCH_SIZE` | `64` | Taille de batch (ajuster selon RAM) |
+| `SIMILARITY_THRESHOLD` | `0.75` | Seuil de similarité HCP |
+| `MAX_LENGTH` | `96` | Longueur max des séquences |
+| `TEMPERATURE` | `0.3` | Température de génération |
+
+### Configuration HCP spécialisée
+
+Votre `config.py` contient des configurations optimisées pour :
+- **Données démographiques HCP Maroc** avec 140,000+ statistiques
+- **Structure qa_pairs moderne** pour questions-réponses
+- **2000+ territoires marocains** avec indicateurs précis
+- **Mappage d'indicateurs HCP** (population, matrimonial, âge, emploi, etc.)
+- **Réponses contextuelles** adaptées aux données officielles
+
+## 🧪 Tests et vérification
+
+### Endpoints disponibles
+
+| Endpoint | Méthode | Description | Exemple |
+|----------|---------|-------------|---------|
+| `/` | GET | Interface web principale | http://localhost:5000 |
+| `/health` | GET | Statut de santé du système | http://localhost:5000/health |
+| `/chat` | POST | API de chat HCP | Voir exemple ci-dessous |
+| `/territories` | GET | Liste des territoires HCP | http://localhost:5000/territories |
+
+### Tester l'API Chat
+
+```bash
+# Test basique
+curl -X POST http://localhost:5000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Population du Maroc"}'
+
+# Test avec territoire spécifique
+curl -X POST http://localhost:5000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Population légale de Casablanca"}'
+
+# Test avec indicateur démographique
+curl -X POST http://localhost:5000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Pourcentage de mariés au niveau national"}'
+```
+
+### Exemple de réponse API
+
+```json
+{
+  "response": "La population légale du Maroc (Ensemble du territoire national) est de 33 848 242 habitants selon les dernières données HCP.",
+  "status": "success",
+  "metadata": {
+    "model_used": "semantic_search",
+    "qa_pairs_count": 140567,
+    "response_method": "semantic_search",
+    "territory_detected": "Ensemble du territoire national",
+    "indicator_detected": "population_legale",
+    "is_greeting": false
+  }
+}
+```
+
+## 🔍 Monitoring et logs
+
+### Voir les logs en temps réel
+```bash
+# Tous les logs
+docker-compose logs -f
+
+# Logs spécifiques au chatbot
+docker-compose logs -f hcp-chatbot
+```
+
+### Vérifier la santé du système
+```bash
+curl http://localhost:5000/health
+```
+
+Réponse attendue :
+```json
+{
+  "status": "healthy",
+  "chatbot_initialized": true,
+  "data_loaded": true,
+  "data_count": 140567,
+  "qa_pairs_count": 140567,
+  "is_trained": false,
+  "has_embeddings": true
+}
+```
+
+## 🎯 Optimisation des performances
+
+### Ajustement selon votre machine
+
+**Machine avec peu de RAM (< 8GB) :**
+```env
+BATCH_SIZE=32
+DATALOADER_NUM_WORKERS=1
+MAX_LENGTH=64
+USE_CUDA=False
+```
+
+**Machine performante (16GB+ RAM) :**
+```env
+BATCH_SIZE=128
+DATALOADER_NUM_WORKERS=4
+MAX_LENGTH=128
+USE_CUDA=True  # Si GPU disponible
+```
+
+**Machine avec GPU :**
+```bash
+# Installer nvidia-docker d'abord
+# Puis modifier docker-compose.yml pour ajouter :
+services:
+  hcp-chatbot:
+    runtime: nvidia
+    environment:
+      - USE_CUDA=True
+      - FP16=True
+```
+
+### Surveillance des ressources
+```bash
+# Utilisation CPU/RAM du conteneur
+docker stats hcp-chatbot-app
+
+# Utilisation détaillée
+docker-compose exec hcp-chatbot htop
+```
+
+## 🛠️ Maintenance
+
+### Mise à jour des données HCP
+```bash
+# Copier nouvelles données
+cp nouveau_indicators.json data/indicators.json
+
+# Redémarrer pour recharger
+docker-compose restart
+```
+
+### Mise à jour du code
+```bash
+# Reconstruire l'image
+docker-compose build --no-cache
+
+# Redéployer
+docker-compose up -d
+```
+
+### Sauvegarde des données
+```bash
+# Créer une sauvegarde
+docker-compose exec hcp-chatbot tar -czf /tmp/hcp_backup.tar.gz /app/data /app/models
+
+# Récupérer la sauvegarde
+docker cp hcp-chatbot-app:/tmp/hcp_backup.tar.gz ./backups/
+```
+
+## 🐛 Dépannage
+
+### Problèmes courants
+
+**Le conteneur ne démarre pas :**
+```bash
+# Vérifier les logs
+docker-compose logs hcp-chatbot
+
+# Vérifier la configuration
+docker-compose config
+```
+
+**Données HCP non trouvées :**
+```bash
+# Vérifier la présence du fichier
+docker-compose exec hcp-chatbot ls -la /app/data/
+
+# Vérifier la structure JSON
+docker-compose exec hcp-chatbot python -c "import json; print(json.load(open('/app/data/indicators.json')).keys())"
+```
+
+**Performance lente :**
+- Réduire `BATCH_SIZE` dans `.env`
+- Réduire `DATALOADER_NUM_WORKERS`
+- Vérifier que `USE_CUDA=False` si pas de GPU
+
+**Erreurs de mémoire :**
+```bash
+# Augmenter la limite mémoire Docker
+docker-compose up -d --memory 6g
+```
+
+### Commandes de diagnostic
+```bash
+# Accéder au conteneur
+docker-compose exec hcp-chatbot bash
+
+# Tester la configuration HCP
+docker-compose exec hcp-chatbot python config.py
+
+# Vérifier les modules Python
+docker-compose exec hcp-chatbot pip list
+
+# Tester l'import des modules HCP
+docker-compose exec hcp-chatbot python -c "from src.chatbot import HCPChatbotAdapted; print('OK')"
+```
+
+## 📊 Données HCP supportées
+
+Le système est optimisé pour traiter :
+
+- **Population légale et municipale** par territoire
+- **Répartition par âge** (tranches d'âge détaillées)
+- **Indicateurs matrimoniaux** (célibataires, mariés, divorcés, veufs)
+- **Répartition par genre** (masculin/féminin)
+- **Données d'emploi** (population active, chômage)
+- **Indicateurs d'éducation** (scolarisation)
+- **Données des ménages** (taille moyenne)
+- **Informations de logement**
+
+### Exemples de questions supportées
+
+- "Quelle est la population légale du Maroc ?"
+- "Pourcentage de mariés dans la région de Casablanca"
+- "Population masculine de 25-29 ans au niveau national"
+- "Taux de scolarisation à Rabat"
+- "Nombre de célibataires à Marrakech"
+
+## 🔗 Intégration
+
+### Utiliser l'API dans votre application
+
+```python
+import requests
+
+# Fonction helper pour interroger le chatbot HCP
+def ask_hcp_chatbot(question):
+    response = requests.post(
+        "http://localhost:5000/chat",
+        json={"message": question},
+        headers={"Content-Type": "application/json"}
+    )
+    return response.json()
+
+# Exemple d'utilisation
+result = ask_hcp_chatbot("Population légale de Fès")
+print(result["response"])
+```
+
+### Intégration avec d'autres services
+```bash
+# Utiliser en tant que microservice
+docker network create hcp-network
+docker-compose up -d
+# Vos autres services peuvent maintenant communiquer via hcp-chatbot:5000
+```
+
+## 📈 Monitoring avancé
+
+Pour un monitoring en production, considérez l'ajout de :
+
+- **Prometheus + Grafana** pour métriques
+- **ELK Stack** pour logs centralisés  
+- **Health checks** automatisés
+- **Alerting** sur pannes système
+
+## 🤝 Support
+
+En cas de problème :
+1. Vérifiez les logs : `docker-compose logs -f`
+2. Validez votre configuration : `python config.py`
+3. Testez l'endpoint de santé : `curl http://localhost:5000/health`
+4. Vérifiez vos données HCP : structure qa_pairs correcte
+
+---
+
+**🎯 Votre chatbot HCP est maintenant prêt à traiter les questions sur les données démographiques officielles du Maroc !**

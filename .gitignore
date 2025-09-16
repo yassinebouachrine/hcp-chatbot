@@ -1,0 +1,31 @@
+cat > .gitignore <<'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+
+# Virtual env
+venv/
+.venv/
+.env
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Ignore data/models by default only if you don't want to push them
+# data/
+# models/
+EOF
