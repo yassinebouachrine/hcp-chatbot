@@ -1,6 +1,6 @@
-# 🇲🇦 HCP Chatbot - Assistant IA pour Données Démographiques du Maroc
+# 🇲🇦 HCP Chatbot — Assistant IA pour les données démographiques d'Agadir
 
-Chatbot intelligent spécialisé dans l'analyse et la consultation des données officielles du **Haut-Commissariat au Plan (HCP)** du Maroc. Accès instantané à plus de 140 000 statistiques démographiques couvrant 2000+ territoires marocains.
+Chatbot intelligent spécialisé dans l'analyse et la consultation des données officielles du **Haut-Commissariat au Plan (HCP)** pour la **région d'Agadir**. Accès instantané aux statistiques démographiques locales couvrant les communes, provinces et territoires de la région d'Agadir.
 
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://hub.docker.com/r/bouachrineyassine/hcp-chatbot)
 [![Flask](https://img.shields.io/badge/Flask-2.3.3-green?logo=flask)](https://flask.palletsprojects.com/)
