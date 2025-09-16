@@ -140,14 +140,13 @@ python app.py
 
 ## 📞 Support
 
-- 🐛 **Issues** : [GitHub Issues](https://github.com/yassinebouachrine/hcp-chatbot/issues)
 - 📧 **Contact** : bouachrinyassin0@gmail.com
 
 ## 📜 Licence
 
 Ce projet est sous licence **MIT**. 
 
-### Remerciements
+### Sources
 
 - 🏛️ **Haut-Commissariat au Plan (HCP)** pour les données officielles
 - 🤗 **Hugging Face** pour DistilGPT2 et les transformers
