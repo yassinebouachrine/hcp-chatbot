@@ -9,7 +9,7 @@ Chatbot intelligent spécialisé dans l'analyse et la consultation des données 
 
 ## 📊 À propos du projet
 
-Le **HCP Chatbot** facilite l'accès aux données démographiques officielles du Maroc en utilisant l'IA pour répondre aux questions sur :
+Le **HCP Chatbot** facilite l'accès aux données démographiques officielles de la région d'agadir en utilisant l'IA pour répondre aux questions sur :
 
 - **Population légale et municipale** par région, province, commune
 - **Indicateurs démographiques** (âge, genre, état matrimonial)  
