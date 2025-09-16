@@ -9,12 +9,12 @@ Chatbot intelligent spécialisé dans l'analyse et la consultation des données 
 
 ## 📊 À propos du projet
 
-Le **HCP Chatbot** facilite l'accès aux données démographiques officielles de la région d'agadir en utilisant l'IA pour répondre aux questions sur :
+Le **HCP Chatbot** facilite l'accès aux données démographiques officielles **de la région d'Agadir** en utilisant l'IA pour répondre aux questions sur :
 
-- **Population légale et municipale** par région, province, commune
-- **Indicateurs démographiques** (âge, genre, état matrimonial)  
-- **Statistiques socio-économiques** (emploi, éducation, logement)
-- **Répartition territoriale** détaillée du Royaume
+* **Population légale et municipale** au niveau de la région, des provinces et des communes d'Agadir
+* **Indicateurs démographiques** (répartition par âge, genre, état matrimonial)
+* **Statistiques socio-économiques** locales (emploi, éducation, logement)
+* **Répartition territoriale détaillée** au sein de la région (zones urbaines/rurales, découpages administratifs)
 
 ### 🎯 Fonctionnalités
 
